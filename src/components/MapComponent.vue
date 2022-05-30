@@ -13,6 +13,7 @@
 import proj4 from 'proj4'
 
 const ol = window.ol
+//const SuperMap = window.SuperMap
 export default {
   name: "MapComponent",
   mounted() {
@@ -22,6 +23,7 @@ export default {
     this.addControl()
     //添加绘制图层
     this.addVector()
+    this.addPoint()
   },
   data() {
     return {
@@ -153,6 +155,20 @@ export default {
         this.map.removeInteraction(this.draw)
       }
     },
+    addPoint() {
+      const point = ol.proj.transform([100.33,32.280000018770551], 'EPSG:4326', this.projection)
+      var vectorSource = new ol.source.Vector({
+        features: [new ol.Feature({
+          geometry: new ol.geom.Point(point),
+          name: 'Point'
+        })],
+        wrapX: false
+      });
+      const resultLayer = new ol.layer.Vector({
+        source: vectorSource
+      });
+      window.map.addLayer(resultLayer);
+    }
   }
 }
 </script>
